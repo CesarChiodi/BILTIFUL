@@ -1,5 +1,6 @@
 ﻿using BILTIFUL.Core;
 using BILTIFUL.Core.Controles;
+using BILTIFUL.Core.Crud;
 using BILTIFUL.Core.Entidades;
 using BILTIFUL.Core.Entidades.Enums;
 using System;
@@ -10,8 +11,10 @@ namespace BILTIFUL.ModuloProducao
 {
     public class ProducaoService
     {
-
+        CrudCadastro crudCadastro = new CrudCadastro();
         CadastroService cadastroService = new CadastroService();
+
+
 
         public void SubMenu()
         {
@@ -215,10 +218,10 @@ namespace BILTIFUL.ModuloProducao
             cadastroService.SalvarCodigos();
 
             cadastroService.cadastros.producao.Add(producao);
-            new Controle(producao);
+            //new Controle(producao);
 
             cadastroService.cadastros.itensproducao.AddRange(itemProducaos);
-            itemProducaos.ForEach(c => { c.Id = producao.Id; new Controle(c); });
+            itemProducaos.ForEach(c => { c.Id = producao.Id; /*new Controle(c);*/ });
 
         }
 

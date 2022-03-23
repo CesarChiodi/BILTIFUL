@@ -253,7 +253,7 @@ namespace BILTIFUL.ModuloVenda
             {
                 SalvarItemVenda(codigo);
                 controle.vendas.Add(new Venda(codigo, clienteVenda, valorVenda.ToString("F2").Replace(",", "").Replace(".", "")));
-                new Controle(new Venda(codigo, clienteVenda, valorVenda.ToString("F2").Replace(",", "").Replace(".", "")));
+                /*new Controle(*/new Venda(codigo, clienteVenda, valorVenda.ToString("F2").Replace(",", "").Replace(".", ""));
                 Console.WriteLine("\n\t\t\t\t\tCompra cadastrada com sucesso!!");
                 Console.ReadKey();
 
@@ -311,7 +311,7 @@ namespace BILTIFUL.ModuloVenda
             {
                 if (iv.Id == codigo)
                 {
-                    new Controle(new ItemVenda(codigo, iv.Produto, iv.Quantidade.ToString().Replace(",", "").Replace(".", ""), iv.ValorUnitario.ToString().Replace(",", "").Replace(".", "")));
+                    /*new Controle(*/new ItemVenda(codigo, iv.Produto, iv.Quantidade.ToString().Replace(",", "").Replace(".", ""), iv.ValorUnitario.ToString().Replace(",", "").Replace(".", ""));
 
                 }
             }

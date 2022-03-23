@@ -45,7 +45,7 @@ namespace BILTIFUL.Core.Controles
             inadimplentes = new List<string>();
             bloqueados = new List<string>();
             
-            try
+            /*try
             {
                 StreamReader sr;
                 string line;
@@ -494,7 +494,7 @@ namespace BILTIFUL.Core.Controles
                 {
                     Console.WriteLine("Exception: " + e.Message);
                 }
-            }
+            }*/
         }
     }
 

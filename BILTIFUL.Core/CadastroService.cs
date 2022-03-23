@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BILTIFUL;
 using BILTIFUL.Core.Controles;
+using BILTIFUL.Core.Crud;
 using BILTIFUL.Core.Entidades;
 using BILTIFUL.Core.Entidades.Enums;
 
@@ -14,10 +15,12 @@ namespace BILTIFUL.Core
 {
     public class CadastroService
     {
+        CrudCadastro crudCadastro = new CrudCadastro();
         public CadastroService()
         {
         }
 
+        
         public Controle cadastros = new Controle();
 
         public void SubMenu()
@@ -138,8 +141,9 @@ namespace BILTIFUL.Core
 
             Cliente cliente = new Cliente(cpf, nome, dnascimento, sexo);
 
-            new Controle(cliente);
-            cadastros.clientes.Add(cliente);
+            //new Controle(cliente);
+            //cadastros.clientes.Add(cliente);
+            crudCadastro.InsertCliente(cliente);
 
             return cliente;
         }
@@ -218,8 +222,9 @@ namespace BILTIFUL.Core
 
             Fornecedor fornecedor = new Fornecedor(cnpj, rsocial, dabertura);
 
-            new Controle(fornecedor);
-            cadastros.fornecedores.Add(fornecedor);
+            //new Controle(fornecedor);
+            //cadastros.fornecedores.Add(fornecedor);
+            crudCadastro.InsertFornecedor(fornecedor);
 
             return fornecedor;
         }
@@ -280,8 +285,9 @@ namespace BILTIFUL.Core
             string cod = "" + cadastros.codigos[0];
 
             Produto produto = new Produto(cod, nome, svalor);
-            new Controle(produto);
-            cadastros.produtos.Add(produto);
+            //new Controle(produto);
+            //cadastros.produtos.Add(produto);
+            crudCadastro.InsertProduto(produto);
             return produto;
         }
         public void SalvarCodigos()
@@ -316,9 +322,9 @@ namespace BILTIFUL.Core
 
             MPrima mPrima = new MPrima(cod, nome);
 
-            new Controle(mPrima);
-            cadastros.materiasprimas.Add(mPrima);
-
+            //new Controle(mPrima);
+            //cadastros.materiasprimas.Add(mPrima);
+            crudCadastro.InsertMateriaPrima(mPrima);
             return mPrima;
 
         }
@@ -334,17 +340,17 @@ namespace BILTIFUL.Core
                 if (!ValidaCpf(inadimplente))//valida cpf
                     Console.WriteLine("\t\t\t\t\tCpf invalido!\nDigite novamente");
             } while (!ValidaCpf(inadimplente));
-            if (cadastros.inadimplentes.Find(p => p == "" + inadimplente) != null)
+            if (crudCadastro.CompativelBloqueioCliente(inadimplente))
             {
                 Console.WriteLine("\t\t\t\t\tInadimplente com esse CPF ja existe");
                 return null;
             }
             string cpf = inadimplente;
 
-            if (cadastros.clientes.Find(p => p.CPF == cpf) != null)
+            if (crudCadastro.SelectCliente().Find(p => p.CPF == cpf) != null)
             {
-                new Controle(cpf);
-                cadastros.inadimplentes.Add("" + cpf);
+                //new Controle(cpf);
+                crudCadastro.BloqueioCliente(cpf);
                 return cpf;
             }
             return null;
@@ -358,10 +364,10 @@ namespace BILTIFUL.Core
             {
                 Console.Write("\t\t\t\t\tDigite o CNPJ do fornecedor: ");
                 bloqueado = Console.ReadLine().Trim().Replace(".", "").Replace("-", "").Replace("/", "");
-                if (!ValidaCnpj(bloqueado))//valida cpf
+                if (!ValidaCnpj(bloqueado))
                     Console.WriteLine("\t\t\t\t\tCnpj invalido!\nDigite novamente");
             } while (!ValidaCnpj(bloqueado));
-            if (cadastros.bloqueados.Find(p => p == bloqueado) != null)
+            if (crudCadastro.CompativelBloqueioFornecedor(bloqueado))
             {
                 Console.WriteLine("\t\t\t\t\tFornecedor com esse cnpj ja existe");
                 return null;
@@ -369,10 +375,10 @@ namespace BILTIFUL.Core
 
             string cnpj = bloqueado;
 
-            if (cadastros.fornecedores.Find(p => p.CNPJ == cnpj) != null)
+            if (crudCadastro.SelectFornecedor().Find(p => p.CNPJ == cnpj) != null)
             {
-                new Controle(cnpj);
-                cadastros.bloqueados.Add("" + cnpj);
+                //new Controle(cnpj);
+                crudCadastro.BloqueioFornecedor(cnpj);
                 return cnpj;
             }
             return null;
@@ -391,11 +397,9 @@ namespace BILTIFUL.Core
                     Console.WriteLine("\t\t\t\t\tCpf invalido!\n\t\t\t\t\tDigite novamente");
             } while (!ValidaCpf(inadimplente));
 
-            long cpf = long.Parse(inadimplente);
-
-            if (cadastros.inadimplentes.Find(p => p == "" + cpf) != null)
+            if (crudCadastro.CompativelBloqueioCliente(inadimplente))
             {
-                Remover(cpf);
+                crudCadastro.RemoverBloqueioCliente(inadimplente);
                 Console.WriteLine("\t\t\t\t\tCpf Liberado");
             }
                 
@@ -410,13 +414,17 @@ namespace BILTIFUL.Core
                 Console.Write("\t\t\t\t\tDigite o cnpj do fornecedor bloqueado: ");
                 bloqueado = Console.ReadLine().Trim().Replace(".", "").Replace("-", "").Replace("/", "");
                 if (!ValidaCnpj(bloqueado))//valida cpf
-                    Console.WriteLine("\t\t\t\t\tCpf invalido!\n\t\t\t\t\tDigite novamente");
+                    Console.WriteLine("\t\t\t\t\tCnpj invalido!\n\t\t\t\t\tDigite novamente");
             } while (!ValidaCnpj(bloqueado));
 
             long cnpj = long.Parse(bloqueado);
 
-            if (cadastros.bloqueados.Find(p => p == "" + cnpj) != null)
-                Remover(cnpj);
+            if (crudCadastro.CompativelBloqueioFornecedor(bloqueado))
+            {
+                crudCadastro.RemoverBloqueioFornecedor(bloqueado);
+                Console.WriteLine("\t\t\t\t\tCnpj Liberado");
+            }
+                
         }
         public void Remover(long chave)
         {
@@ -573,7 +581,7 @@ namespace BILTIFUL.Core
                         } while (ValidaCpf(cpf) != true);
                         Console.Clear();
 
-                        Cliente localizarcliente = cadastros.clientes.Find(p => p.CPF == (cpf));
+                        Cliente localizarcliente = crudCadastro.SelectCliente().Find(p => p.CPF == (cpf));
                         if (localizarcliente != null)
                         {
                             encontrado = true;
@@ -593,7 +601,7 @@ namespace BILTIFUL.Core
                         } while (ValidaCnpj(cnpj) != true);
                         Console.Clear();
 
-                        Fornecedor localizarfornecedor = cadastros.fornecedores.Find(p => p.CNPJ == cnpj);
+                        Fornecedor localizarfornecedor = crudCadastro.SelectFornecedor().Find(p => p.CNPJ == cnpj);
                         if (localizarfornecedor != null)
                         {
                             encontrado = true;
@@ -603,7 +611,7 @@ namespace BILTIFUL.Core
                     case "3":
                         Console.Write("\t\t\t\t\tDigite o nome que deseja localizar: ");
                         string nomeMateriaPrima = Console.ReadLine().Trim().ToLower();
-                        List<MPrima> localizarmprima = cadastros.materiasprimas.FindAll(p => p.Nome.ToLower() == nomeMateriaPrima);
+                        List<MPrima> localizarmprima = crudCadastro.SelectMateriaPrima().FindAll(p => p.Nome.ToLower() == nomeMateriaPrima);
                         if (localizarmprima != null)
                         {
                             encontrado = true;
@@ -613,7 +621,7 @@ namespace BILTIFUL.Core
                     case "4":
                         Console.Write("\t\t\t\t\tDigite o nome do produto que deseja localizar: ");
                         string nomeProduto = Console.ReadLine().Trim().ToLower();
-                        List<Produto> localizaProduto = cadastros.produtos.FindAll(p => p.Nome.ToLower() == nomeProduto);
+                        List<Produto> localizaProduto = crudCadastro.SelectProduto().FindAll(p => p.Nome.ToLower() == nomeProduto);
                         if (localizaProduto != null)
                         {
                             encontrado = true;
@@ -623,7 +631,7 @@ namespace BILTIFUL.Core
                     case "5":
                         Console.Write("\t\t\t\t\tDigite a data de venda que deseja localizar(dd/mm/aaaa): ");
                         DateTime dvenda = DateTime.Parse(Console.ReadLine());
-                        List<Venda> localizavenda = cadastros.vendas.FindAll(p => p.DataVenda == dvenda);
+                        List<Venda> localizavenda = crudCadastro.SelectVenda().FindAll(p => p.DataVenda == dvenda);
                         if (localizavenda != null)
                         {
                             encontrado = true;
@@ -642,7 +650,7 @@ namespace BILTIFUL.Core
                     case "6":
                         Console.Write("\t\t\t\t\tDigite o data de compra que deseja localizar(dd/mm/aaaa): ");
                         DateTime dcompra = DateTime.Parse(Console.ReadLine());
-                        List<Compra> localizacompra = cadastros.compras.FindAll(p => p.DataCompra == dcompra);
+                        List<Compra> localizacompra = crudCadastro.SelectCompra().FindAll(p => p.DataCompra == dcompra);
                         if (localizacompra != null)
                         {
                             encontrado = true;
@@ -661,7 +669,7 @@ namespace BILTIFUL.Core
                     case "7":
                         Console.Write("\t\t\t\t\tDigite o data de produção que deseja localizar(dd/mm/aaaa): ");
                         DateTime dproducao = DateTime.Parse(Console.ReadLine());
-                        List<Producao> localizaproducao = cadastros.producao.FindAll(p => p.DataProducao == dproducao);
+                        List<Producao> localizaproducao = crudCadastro.SelectProducao().FindAll(p => p.DataProducao == dproducao);
                         if (localizaproducao != null)
                         {
                             encontrado = true;

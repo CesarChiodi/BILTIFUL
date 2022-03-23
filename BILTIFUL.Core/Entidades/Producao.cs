@@ -1,5 +1,6 @@
 ﻿using BILTIFUL.Core.Entidades.Base;
 using System;
+using System.Collections.Generic;
 
 namespace BILTIFUL.Core.Entidades
 {
@@ -9,9 +10,11 @@ namespace BILTIFUL.Core.Entidades
         //ID produto
         public string Produto { get; set; }
         public string Quantidade { get; set; }
+        public List<ItemProducao> Itens { get; set; }
 
         public Producao()
         {
+            Itens = new List<ItemProducao>();
         }
 
         public Producao(string id, string produto, string quantidade)
@@ -19,6 +22,7 @@ namespace BILTIFUL.Core.Entidades
             Id = id;
             Produto = produto;
             Quantidade = quantidade;
+            Itens = new List<ItemProducao>();
         }
 
         public Producao(string produto, string quantidade)

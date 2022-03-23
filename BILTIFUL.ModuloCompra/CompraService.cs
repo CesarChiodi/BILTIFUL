@@ -1,5 +1,6 @@
 ﻿using BILTIFUL.Core;
 using BILTIFUL.Core.Controles;
+using BILTIFUL.Core.Crud;
 using BILTIFUL.Core.Entidades;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ namespace BILTIFUL.ModuloCompra
 {
     public class CompraService
     {
+        CrudCadastro crudCadastro = new CrudCadastro();
         CadastroService cadastroService = new CadastroService();
 
         //List<Fornecedor> testes = new List<Fornecedor>();
@@ -94,7 +96,7 @@ namespace BILTIFUL.ModuloCompra
                                 {
                                     if (i.Id == p.Id)
                                         Console.WriteLine(i.DadosItemCompra());
-                                    encontrado = true;
+                                        encontrado = true;
                                 }
                                 Console.ReadKey();
                             }
@@ -109,12 +111,12 @@ namespace BILTIFUL.ModuloCompra
 
                     case "2":
 
-                        bool saida = false;
+                        bool saida = true;
 
                         Console.Write("\t\t\t\t\tDigite o CNPJ do fornecedor que deseja localizar: ");
 
                         cnpj = Console.ReadLine().Trim().Replace(".", "").Replace("-", "").Replace("/", "");
-                        saida = true;
+                        //saida = true;
                         List<Compra> localizacnpj = cadastroService.cadastros.compras.FindAll(p => p.Fornecedor == cnpj);
                         if (localizacnpj != null)
                         {
@@ -202,7 +204,7 @@ namespace BILTIFUL.ModuloCompra
                     return;
                 }
 
-                Fornecedor fornecedorCompra = BuscarCnpj(cnpj.ToString(), cadastroService.cadastros.fornecedores);
+                Fornecedor fornecedorCompra = BuscarCnpj(cnpj.ToString(), crudCadastro.SelectFornecedor());
                 if (fornecedorCompra == null)
                 {
                     Console.WriteLine("\t\t\t\t\tFornecedor nao encontrado.");
@@ -396,8 +398,10 @@ namespace BILTIFUL.ModuloCompra
 
 
                 Compra compra = new Compra(cod, cnpj, valorTotalString);
-                cadastroService.cadastros.compras.Add(compra);
-                new Controle(compra);
+                //cadastroService.cadastros.compras.Add(compra);
+                //new Controle(compra);
+                crudCadastro.InsertCompra(compra);
+
                 for (int i = 0; i < cont; i++)
                 {
 
@@ -406,8 +410,9 @@ namespace BILTIFUL.ModuloCompra
 
 
                     ItemCompra itemCompra = new ItemCompra(cod, idMPrima[i], quantidadeString[i], stringValor[i], totalItemString[i]);
-                    new Controle(itemCompra);
-                    cadastroService.cadastros.itenscompra.Add(itemCompra);
+                    // new Controle(itemCompra);
+                    //cadastroService.cadastros.itenscompra.Add(itemCompra);
+                    crudCadastro.InsertItemCompra(itemCompra);
                 }
             }
             else

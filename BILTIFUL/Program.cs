@@ -4,6 +4,10 @@ using BILTIFUL.ModuloProducao;
 using BILTIFUL.ModuloVenda;
 using BILTIFUL.Core;
 using System;
+using System.Globalization;
+//using System.Collections.Generic;
+//using System.Data;
+//using System.Data.SqlClient;
 
 namespace BILTIFUL
 {
@@ -11,7 +15,7 @@ namespace BILTIFUL
     {
         static void Main(string[] args)
         {
-            
+            CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("pt-BR");
             Menu();
         }
 
