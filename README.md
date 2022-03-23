@@ -1,3 +1,15 @@
+ATUALIZACAO= 23/03/2022;
+
+criacao de um mer e criacao de um banco de dados no sql; 
+
+Criacao da conexao do projeto com o banco de dados, cadastros basicos select e insert e inadimplentes/bloqueados;
+
+Nao foi concluido ainda a parte venda e producao relacionado ao banco de dados;
+
+Nao esta completa a parte de localizar registro e mostrar registro; 
+
+
+
 ## BILTIFUL
 BILTIFUL é um projeto de controle de estoque, produção e vendas para uma empresa de cosméticos, o projeto foi desenvolvido utilizando ConsoleApp
 
