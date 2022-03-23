@@ -1,6 +1,6 @@
 ATUALIZACAO= 23/03/2022;
 
-criacao de um mer e criacao de um banco de dados no sql; 
+criacao de um mer e criacao de um banco de dados no sql: ''SQLQuery1.sql(Beautful_Project).sql'' 
 
 Criacao da conexao do projeto com o banco de dados, cadastros basicos select e insert e inadimplentes/bloqueados;
 
